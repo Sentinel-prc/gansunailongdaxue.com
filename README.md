@@ -21,6 +21,9 @@ Wrangler 会自动执行 `pnpm run build`，将静态资源生成到 `dist/` 并
 # 验证配置和打包，不上传
 pnpm run check
 
+# 验证统计代理
+pnpm test
+
 # 登录 Cloudflare 并部署
 pnpm exec wrangler login
 pnpm run deploy
@@ -32,9 +35,11 @@ pnpm run deploy
 
 - `public/index.html`：页面模板、页脚链接及 Umami 脚本。
 - `public/styles.css`：页面样式、深色模式和响应式布局。
-- `public/motion.js`：指针牵引、跳转过渡和动效暂停控制。
+- `public/motion.js`：指针牵引、进入方向对应的箭头动效和跳转过渡。
+- `public/traffic.js`：页脚统计加载与手动刷新。
 - `public/logo.png`、`public/favicon.ico`：裁切后的透明校徽与站点图标。
-- `src/index.js`：通过 `ASSETS` 绑定返回静态资源。
+- `src/index.js`：返回静态资源与 `/api/traffic` 统计接口。
+- `src/traffic.js`：Umami 汇总查询、缓存与并发合并。
 - `scripts/build.mjs`：生成静态资源并注入提交版本。
 - `wrangler.jsonc`：Worker 名称及静态资源配置。
 - `pnpm-lock.yaml`：锁定依赖版本。
@@ -44,5 +49,17 @@ Umami 当前使用 `https://umami.amoe.cc/script.js`，网站 ID 为 `ee3cbb93-6
 
 页面使用原生 HTML/CSS 和少量 JavaScript，构建脚本只复制资源并注入版本；唯一开发依赖是 Wrangler。图标从用户提供的原图裁切，保留圆圈内部图案，圈外透明。
 
-页面采用流光背景与偏心轨道，入场约 2.4 秒，光点与星芒以 32～55 秒周期持续公转。页脚可暂停持续动效；系统开启“减少动态效果”时自动关闭动画。页面隐藏时暂停循环动画，返回时复位跳转效果。GO 保留原生新窗口打开行为，并在当前页面播放光圈过渡；禁用 JavaScript 后页面保持静止，所有链接仍可使用。
+页面采用流光背景与偏心轨道，入场约 2.4 秒，光点与星芒以 32～55 秒周期持续公转。系统开启“减少动态效果”时自动关闭动画。页面隐藏时暂停循环动画，返回时复位跳转效果。GO 箭头按指针进入方向转向，键盘聚焦默认朝右上方；原生新窗口打开行为保持不变。禁用 JavaScript 后页面保持静止，所有链接仍可使用。
+
+## 页脚访问统计
+
+Worker 直接代理 Umami 汇总查询，无需额外后端、数据库或付费绑定。在 Umami 中为此站点创建**网站分享链接**，最少勾选「流量 → 概览」。本地在不提交 Git 的 `.dev.vars` 中配置：
+
+```env
+UMAMI_SHARE_URL=https://umami.amoe.cc/share/分享码
+```
+
+生产环境在 Worker 的「Settings → Variables and Secrets」中添加类型为 Secret、名称为 `UMAMI_SHARE_URL` 的配置，值填写真实分享链接；也可运行 `pnpm exec wrangler secret put UMAMI_SHARE_URL` 交互输入。分享链接和运行时获取的 token 仅供 Worker 使用，不写入 `wrangler.jsonc`、前端资源或 Git。`.dev.vars` 已被 Git 忽略，仅用于本地开发。只支持当前统计域名和此站点 ID；未配置或查询失败时显示占位符和刷新入口。
+
+今日按 UTC+8 零点起算；总计为 Umami 全历史汇总；当前在线为最近五分钟的活跃访客。浏览器仅在载入和点击「刷新」时查询本站 `/api/traffic`，不自动轮询。Worker 合并并发请求，并使用内存及 Cloudflare Cache API 缓存汇总结果最多 30 秒、跨天失效；缓存按边缘数据中心复用，未命中时请求 Umami 四次。失败短暂退避 5 秒，刷新失败保留已有数字。
 

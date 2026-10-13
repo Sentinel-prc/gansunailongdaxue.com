@@ -1,10 +1,8 @@
 const scene = document.querySelector(".scene");
 const go = document.querySelector(".go");
-const toggle = document.querySelector(".motion-toggle");
 const wipe = document.querySelector(".exit-wipe");
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
-let paused = false;
 let exitTimer;
 let pointerFrame;
 
@@ -20,25 +18,38 @@ function resetPointer() {
 }
 
 function renderMotion() {
-  scene.classList.toggle("is-paused", paused);
-  toggle.hidden = reducedMotion.matches;
-  toggle.setAttribute("aria-pressed", String(paused));
-  toggle.querySelector("span").textContent = paused ? "继续动效" : "暂停动效";
-  if (paused || reducedMotion.matches) {
+  if (reducedMotion.matches) {
     resetPointer();
     resetExit();
   }
 }
 
-toggle.addEventListener("click", () => {
-  paused = !paused;
-  renderMotion();
-});
 reducedMotion.addEventListener("change", renderMotion);
+
+function arrowDirection(x = Math.SQRT1_2, y = -Math.SQRT1_2) {
+  const angle = Math.atan2(y, x);
+  const rotation = (((angle * 180) / Math.PI + 45 + 540) % 360) - 180;
+  go.style.setProperty("--arrow-x", `${Math.cos(angle) * 6}px`);
+  go.style.setProperty("--arrow-y", `${Math.sin(angle) * 6}px`);
+  go.style.setProperty("--arrow-exit-x", `${Math.cos(angle) * 56}px`);
+  go.style.setProperty("--arrow-exit-y", `${Math.sin(angle) * 56}px`);
+  go.style.setProperty("--arrow-rotation", `${rotation}deg`);
+}
+
+go.addEventListener("pointerenter", (event) => {
+  if (!finePointer.matches || event.pointerType === "touch") return;
+  const rect = go.getBoundingClientRect();
+  arrowDirection(
+    (event.clientX - rect.left - rect.width / 2) / rect.width,
+    (event.clientY - rect.top - rect.height / 2) / rect.height,
+  );
+});
+go.addEventListener("focus", () => {
+  if (go.matches(":focus-visible")) arrowDirection();
+});
 
 scene.addEventListener("pointermove", (event) => {
   if (
-    paused ||
     reducedMotion.matches ||
     !finePointer.matches ||
     event.pointerType === "touch"
@@ -68,7 +79,6 @@ go.addEventListener("click", (event) => {
     event.ctrlKey ||
     event.shiftKey ||
     event.altKey ||
-    paused ||
     reducedMotion.matches
   )
     return;

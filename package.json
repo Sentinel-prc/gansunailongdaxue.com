@@ -5,6 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@11.23.0",
   "scripts": {
+    "test": "node --test",
     "build": "node scripts/build.mjs",
     "dev": "wrangler dev --ip 127.0.0.1 --port 8787 --live-reload",
     "check": "wrangler deploy --dry-run",

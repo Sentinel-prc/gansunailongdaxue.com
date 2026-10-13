@@ -403,31 +403,59 @@ footer a:hover {
   opacity: 0.4;
   font-size: 12px;
 }
-.motion-toggle {
-  position: absolute;
-  right: max(24px, env(safe-area-inset-right));
-  top: 19px;
+.traffic-stats,
+.traffic-group,
+.traffic-refresh {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  flex-wrap: wrap;
+}
+.traffic-stats {
+  display: flex;
+  gap: 0 10px;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.8;
+  font-variant-numeric: tabular-nums;
+}
+.traffic-group {
+  gap: 0 6px;
+}
+.traffic-group > span {
+  white-space: nowrap;
+}
+.traffic-divider {
+  opacity: 0.6;
+}
+.traffic-refresh {
   min-height: 44px;
-  padding: 0 6px;
-  color: var(--muted);
+  gap: 4px;
+  padding: 0 4px;
+  color: inherit;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
+  font-size: inherit;
+}
+.traffic-refresh:hover {
+  color: var(--blue);
+  text-decoration: underline;
+}
+.traffic-refresh:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.traffic-stats[aria-busy="true"] .traffic-refresh svg {
+  animation: refresh-spin 1s linear infinite;
+}
+.traffic-status {
   font-size: 11px;
 }
-.motion-toggle:hover {
-  color: var(--blue);
-}
-.play-icon,
-.is-paused .pause-icon {
-  display: none;
-}
-.is-paused .play-icon {
-  display: block;
+@keyframes refresh-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 .exit-wipe {
   position: absolute;
@@ -477,12 +505,6 @@ footer a:hover {
 .is-leaving .exit-wipe {
   animation: wipe-out 1050ms cubic-bezier(0.65, 0, 0.25, 1) 200ms both;
 }
-.is-paused .satellite,
-.is-paused .logo,
-.is-paused .ambient,
-.is-paused .sticker,
-.is-paused .star svg,
-.is-paused .go::after,
 .is-hidden .satellite,
 .is-hidden .logo,
 .is-hidden .ambient,
@@ -628,8 +650,14 @@ footer a:hover {
   }
 }
 @keyframes arrow-out {
+  from {
+    transform: translate(var(--arrow-x, 4px), var(--arrow-y, -4px))
+      rotate(var(--arrow-rotation, 0deg));
+    opacity: 1;
+  }
   to {
-    transform: translate(35px, -35px);
+    transform: translate(var(--arrow-exit-x, 40px), var(--arrow-exit-y, -40px))
+      rotate(var(--arrow-rotation, 0deg));
     opacity: 0;
   }
 }
@@ -659,7 +687,8 @@ footer a:hover {
       inset 0 2px 0 #ffffffbb;
   }
   .go:hover .go-arrow {
-    transform: translate(3px, -3px);
+    transform: translate(var(--arrow-x, 4px), var(--arrow-y, -4px))
+      rotate(var(--arrow-rotation, 0deg));
   }
   .go:hover::after {
     animation: none;
@@ -672,11 +701,18 @@ footer a:hover {
   opacity: 1;
   background-position: -20% 0;
 }
+.go:focus-visible .go-arrow {
+  transform: translate(var(--arrow-x, 4px), var(--arrow-y, -4px))
+    rotate(var(--arrow-rotation, 0deg));
+}
 @media (max-width: 600px) {
-  .motion-toggle {
-    position: static;
-    min-height: 44px;
-    margin-top: 1px;
+  .traffic-stats {
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+  }
+  .traffic-divider {
+    display: none;
   }
   footer {
     padding-bottom: max(12px, env(safe-area-inset-bottom));

@@ -5,7 +5,11 @@
   "compatibility_date": "2026-10-13",
   "build": {
     "command": "pnpm run build",
-    "watch_dir": ["public", "scripts"]
+    "watch_dir": [
+      "public",
+      "scripts",
+      "src"
+    ]
   },
   "observability": {
     "enabled": false,

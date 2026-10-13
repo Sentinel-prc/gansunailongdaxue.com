@@ -25,6 +25,7 @@
     />
     <link rel="stylesheet" href="/styles.css" />
     <script defer src="/motion.js"></script>
+    <script defer src="/traffic.js"></script>
     <script
       defer
       src="https://umami.amoe.cc/script.js"
@@ -180,35 +181,47 @@
             >查找更多奶群和奶站</a
           >
         </nav>
-        <button class="motion-toggle" type="button" aria-pressed="false" hidden>
-          <svg
-            class="pause-icon"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            aria-hidden="true"
+        <div class="traffic-stats" aria-label="访问统计" aria-live="polite">
+          <span class="traffic-group"
+            ><span>今日</span
+            ><span>访客 <span data-count="today-visitors">—</span></span
+            ><span>浏览 <span data-count="today-pageviews">—</span></span></span
           >
-            <path d="M9 5v14M15 5v14" />
-          </svg>
-          <svg
-            class="play-icon"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linejoin="round"
-            aria-hidden="true"
+          <span class="traffic-divider" aria-hidden="true">·</span>
+          <span class="traffic-group"
+            ><span>总计</span
+            ><span>访客 <span data-count="total-visitors">—</span></span
+            ><span>浏览 <span data-count="total-pageviews">—</span></span></span
           >
-            <path d="m8 4 12 8-12 8Z" />
-          </svg>
-          <span>暂停动效</span>
-        </button>
+          <span class="traffic-divider" aria-hidden="true">·</span>
+          <span class="traffic-group"
+            ><span title="最近五分钟内的活跃访客"
+              >当前在线 <span data-count="online">—</span></span
+            ><button
+              class="traffic-refresh"
+              type="button"
+              aria-label="刷新访问统计"
+              hidden
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path
+                  d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1"
+                /></svg
+              ><span>刷新</span>
+            </button></span
+          >
+          <span class="traffic-status" hidden></span>
+        </div>
       </footer>
       <div class="exit-wipe" aria-hidden="true"></div>
     </div>
