@@ -3,6 +3,12 @@
   "name": "gansunailongdaxue-com",
   "main": "src/index.js",
   "compatibility_date": "2026-10-13",
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  },
   "previews": {
     "observability": {
       "enabled": true,
