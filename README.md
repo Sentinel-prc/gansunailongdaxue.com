@@ -36,6 +36,7 @@ pnpm run deploy
 - `public/index.html`：页面模板、页脚链接及 Umami 脚本。
 - `public/styles.css`：页面样式、深色模式和响应式布局。
 - `public/motion.js`：指针牵引、进入方向对应的箭头动效和跳转过渡。
+- `public/audio.js`：页面载入后后台缓存音频，点击校徽随机播放，音量为 36%，不显示控件或提示。
 - `public/traffic.js`：页脚统计加载与手动刷新。
 - `public/logo.png`、`public/favicon.ico`：裁切后的透明校徽与站点图标。
 - `src/index.js`：返回静态资源与 `/api/traffic` 统计接口。
