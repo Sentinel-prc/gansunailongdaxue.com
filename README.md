@@ -32,6 +32,7 @@ pnpm run deploy
 
 - `public/index.html`：页面模板、页脚链接及 Umami 脚本。
 - `public/styles.css`：页面样式、深色模式和响应式布局。
+- `public/motion.js`：指针牵引、跳转过渡和动效暂停控制。
 - `public/logo.png`、`public/favicon.ico`：裁切后的透明校徽与站点图标。
 - `src/index.js`：通过 `ASSETS` 绑定返回静态资源。
 - `scripts/build.mjs`：生成静态资源并注入提交版本。
@@ -41,5 +42,7 @@ pnpm run deploy
 
 Umami 当前使用 `https://umami.amoe.cc/script.js`，网站 ID 为 `ee3cbb93-6ca4-4164-8a6c-4bb22b80675d`。更换统计配置时编辑 `public/index.html` 的 `<script>`；无需环境变量。
 
-页面使用纯 HTML/CSS，构建脚本只复制资源并注入版本；唯一开发依赖是 Wrangler。图标从用户提供的原图裁切，保留圆圈内部图案，圈外透明。
+页面使用原生 HTML/CSS 和少量 JavaScript，构建脚本只复制资源并注入版本；唯一开发依赖是 Wrangler。图标从用户提供的原图裁切，保留圆圈内部图案，圈外透明。
+
+页面采用流光背景与偏心轨道，入场约 2.4 秒，光点与星芒以 32～55 秒周期持续公转。页脚可暂停持续动效；系统开启“减少动态效果”时自动关闭动画。页面隐藏时暂停循环动画，返回时复位跳转效果。GO 保留原生新窗口打开行为，并在当前页面播放光圈过渡；禁用 JavaScript 后页面保持静止，所有链接仍可使用。
 
