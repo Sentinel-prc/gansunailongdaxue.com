@@ -120,6 +120,31 @@ footer a:hover {
   text-decoration: underline;
 }
 
+.footer-links,
+.footer-source {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0 8px;
+}
+
+.footer-links {
+  flex-wrap: wrap;
+}
+
+.footer-source {
+  white-space: nowrap;
+}
+
+.version {
+  font-variant-numeric: tabular-nums;
+}
+
+.footer-divider {
+  color: var(--link);
+  font-size: 13px;
+}
+
 @media (max-width: 480px) {
   main {
     padding-left: max(20px, env(safe-area-inset-left));
