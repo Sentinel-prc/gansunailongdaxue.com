@@ -238,13 +238,13 @@ h1 {
   inset: 0;
   border-radius: inherit;
   background: linear-gradient(
-    115deg,
+    var(--sheen-angle, 115deg),
     transparent 25%,
     #ffffff55 45%,
     transparent 65%
   );
-  background-size: 300% 100%;
-  background-position: 120% 0;
+  background-size: 300% 300%;
+  background-position: var(--sheen-start, 120% 0);
   opacity: 0;
   pointer-events: none;
   animation: button-sheen 12s ease-in-out 3s infinite;
@@ -258,10 +258,8 @@ h1 {
   transition: transform 400ms;
 }
 .go:focus-visible {
-  transform: rotate(0deg) translateY(-5px);
-}
-.go:active {
-  transform: rotate(0deg) translateY(-1px) scale(0.96);
+  transform: translate(var(--hover-x, 0px), var(--hover-y, -8px))
+    rotate(var(--hover-rotation, 0deg));
 }
 .sticker-wrap {
   position: absolute;
@@ -571,7 +569,7 @@ footer a:hover {
   0%,
   75% {
     opacity: 0;
-    background-position: 120% 0;
+    background-position: var(--sheen-start, 120% 0);
   }
   80% {
     opacity: 0.65;
@@ -579,7 +577,15 @@ footer a:hover {
   96%,
   100% {
     opacity: 0;
-    background-position: -20% 0;
+    background-position: var(--sheen-end, -20% 0);
+  }
+}
+@keyframes hover-sheen {
+  from {
+    background-position: var(--sheen-start, 120% 0);
+  }
+  to {
+    background-position: var(--sheen-end, -20% 0);
   }
 }
 @keyframes rise {
@@ -640,13 +646,19 @@ footer a:hover {
 }
 @keyframes press {
   0% {
-    transform: rotate(-3deg) scale(1);
+    transform: translate(var(--hover-x, 0px), var(--hover-y, -8px))
+      rotate(var(--hover-rotation, 0deg)) scale(1);
   }
   25% {
-    transform: rotate(0deg) scale(0.93);
+    transform: translate(
+        calc(var(--hover-x, 0px) * 0.25),
+        calc(var(--hover-y, -8px) * 0.25)
+      )
+      rotate(var(--hover-rotation, 0deg)) scale(0.93);
   }
   100% {
-    transform: rotate(0deg) scale(1.04);
+    transform: translate(var(--hover-x, 0px), var(--hover-y, -8px))
+      rotate(var(--hover-rotation, 0deg)) scale(1.04);
   }
 }
 @keyframes arrow-out {
@@ -677,10 +689,12 @@ footer a:hover {
 
 @media (hover: hover) and (pointer: fine) {
   .logo-wrap:hover .logo {
-    transform: rotate(8deg) translateY(-5px);
+    transform: translate(var(--hover-x, 0px), var(--hover-y, -10px))
+      rotate(var(--hover-rotation, 0deg));
   }
   .go:hover {
-    transform: rotate(0deg) translateY(-5px);
+    transform: translate(var(--hover-x, 0px), var(--hover-y, -8px))
+      rotate(var(--hover-rotation, 0deg));
     box-shadow:
       0 24px 56px light-dark(#c3982066, #ffd52655),
       0 0 64px light-dark(#ffd52626, #ffd52638),
@@ -691,19 +705,24 @@ footer a:hover {
       rotate(var(--arrow-rotation, 0deg));
   }
   .go:hover::after {
-    animation: none;
+    animation: hover-sheen 1000ms ease-out both;
     opacity: 1;
-    background-position: -20% 0;
   }
 }
 .go:focus-visible::after {
-  animation: none;
+  animation: hover-sheen 1000ms ease-out both;
   opacity: 1;
-  background-position: -20% 0;
 }
 .go:focus-visible .go-arrow {
   transform: translate(var(--arrow-x, 4px), var(--arrow-y, -4px))
     rotate(var(--arrow-rotation, 0deg));
+}
+.go:active {
+  transform: translate(
+      calc(var(--hover-x, 0px) * 0.25),
+      calc(var(--hover-y, -8px) * 0.25)
+    )
+    rotate(var(--hover-rotation, 0deg)) scale(0.96);
 }
 @media (max-width: 600px) {
   .traffic-stats {
