@@ -1,15 +1,15 @@
 :root {
   color-scheme: light dark;
   font-family: MiSans, "Microsoft YaHei", system-ui, sans-serif;
-  color: light-dark(#2b271c, #ece9e3);
+  color: light-dark(#2b271c, #fff6df);
   background: light-dark(#fdfaf3, #17130d);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --muted: light-dark(#777165, #b7b2a5);
-  --gold: #f8c820;
-  --blue: light-dark(#16499c, #6d9fea);
-  --orbit-line: light-dark(#b6a36530, #d9bd6527);
+  --gold: #ffd526;
+  --blue: light-dark(#1353b7, #8fc0ff);
+  --orbit-line: light-dark(#b8840070, #f5cc3d85);
   --focus: light-dark(#b8860b, #f8c820);
 }
 
@@ -63,13 +63,13 @@ button:focus-visible {
   background:
     radial-gradient(
       ellipse at 64% 36%,
-      light-dark(#f8c82032, #f8c82017),
-      transparent 41%
+      light-dark(#ffcf2670, #ffd52655),
+      transparent 46%
     ),
     radial-gradient(
       ellipse at 30% 65%,
-      light-dark(#7398d420, #5388e214),
-      transparent 35%
+      light-dark(#4987e142, #579bff3d),
+      transparent 40%
     );
   transform: translate(var(--pointer-x, 0px), var(--pointer-y, 0px));
   transition: transform 700ms ease;
@@ -90,8 +90,8 @@ button:focus-visible {
   z-index: -2;
   top: 46%;
   left: 50%;
-  width: 620px;
-  height: 490px;
+  width: 760px;
+  height: 600px;
   transform: translate(-50%, -50%) rotate(-22deg);
 }
 .orbit {
@@ -101,17 +101,18 @@ button:focus-visible {
 }
 .orbit-a {
   inset: 36px -4px 66px;
-  border-top-color: light-dark(#bca66560, #e5ca6e50);
+  border-top-color: light-dark(#b88400b0, #ffe478cc);
 }
 .orbit-b {
   inset: 12px -48px 18px 31px;
   transform: rotate(23deg);
-  opacity: 0.75;
+  border-color: light-dark(#326dd070, #82b5ff8c);
+  opacity: 0.95;
 }
 .orbit-c {
   inset: 83px 15px 85px -18px;
   transform: rotate(-15deg);
-  opacity: 0.7;
+  opacity: 0.9;
 }
 .satellite {
   position: absolute;
@@ -124,40 +125,47 @@ button:focus-visible {
   animation: orbit-travel 32s linear infinite;
 }
 .satellite-gold {
-  width: 10px;
-  height: 10px;
+  width: 14px;
+  height: 14px;
   box-shadow:
-    0 0 0 5px #f8c82010,
-    0 0 22px #f8c82070;
+    0 0 0 6px #ffd52624,
+    0 0 26px #ffd526b0;
   animation-delay: -5s;
 }
 .satellite-blue {
-  width: 7px;
-  height: 7px;
+  width: 10px;
+  height: 10px;
   background: var(--blue);
+  box-shadow: 0 0 18px light-dark(#1353b74d, #8fc0ffb0);
   animation-duration: 43s;
   animation-direction: reverse;
   animation-delay: -17s;
 }
 .satellite-small {
-  width: 4px;
-  height: 4px;
+  width: 6px;
+  height: 6px;
+  box-shadow: 0 0 14px #ffd52690;
   animation-duration: 43s;
   animation-direction: reverse;
   animation-delay: -35s;
 }
 .satellite-star {
-  width: 19px;
-  height: 19px;
+  width: 26px;
+  height: 26px;
   color: var(--blue);
   background: transparent;
   animation-duration: 55s;
   animation-delay: -29s;
 }
+.satellite-star svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 6px light-dark(#1353b74d, #8fc0ff99));
+}
 
 main {
   flex: 1;
-  min-height: 550px;
+  min-height: 620px;
   display: grid;
   place-items: center;
   padding: max(88px, env(safe-area-inset-top))
@@ -167,16 +175,16 @@ main {
 .entry {
   position: relative;
   width: 100%;
-  max-width: 490px;
+  max-width: 620px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 }
 .logo-wrap {
-  width: 104px;
-  height: 104px;
-  margin-bottom: 27px;
+  width: 144px;
+  height: 144px;
+  margin-bottom: 34px;
 }
 .logo {
   display: block;
@@ -189,8 +197,8 @@ main {
   animation: seal-float 8s ease-in-out infinite;
 }
 h1 {
-  margin: 0 0 33px;
-  font-size: 32px;
+  margin: 0 0 42px;
+  font-size: 44px;
   font-weight: 650;
   letter-spacing: -0.04em;
   line-height: 1.4;
@@ -203,21 +211,22 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
-  width: 228px;
-  min-height: 88px;
-  padding: 12px 25px;
-  border: 1px solid light-dark(#e1b314, #ffe37b66);
-  border-radius: 26px;
-  background: var(--gold);
-  color: #2e2400;
-  font-size: 47px;
+  gap: 24px;
+  width: 304px;
+  min-height: 116px;
+  padding: 16px 32px;
+  border: 1px solid light-dark(#e9b900, #ffe88bb3);
+  border-radius: 32px;
+  background: linear-gradient(145deg, #fff07a 0%, #ffda2b 45%, #ffc800 100%);
+  color: #261b00;
+  font-size: 64px;
   font-weight: 650;
   letter-spacing: -0.04em;
   line-height: 1;
   box-shadow:
-    0 14px 34px light-dark(#d4a71924, #f8c82014),
-    inset 0 1px 0 #fff7;
+    0 18px 44px light-dark(#d4a7194d, #ffd52638),
+    0 0 50px light-dark(#ffd5261a, #ffd52624),
+    inset 0 2px 0 #ffffff99;
   transform: rotate(-3deg);
   transition:
     transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -244,6 +253,8 @@ h1 {
     background-position 900ms;
 }
 .go-arrow {
+  width: 62px;
+  height: 62px;
   transition: transform 400ms;
 }
 .go:focus-visible {
@@ -254,21 +265,21 @@ h1 {
 }
 .sticker-wrap {
   position: absolute;
-  top: 68px;
-  left: calc(50% + 90px);
+  top: 94px;
+  left: calc(50% + 134px);
 }
 .sticker {
   position: relative;
   display: flex;
   align-items: center;
   gap: 7px;
-  padding: 9px 13px;
+  padding: 11px 16px;
   white-space: nowrap;
   border-radius: 6px;
   background: var(--blue);
   color: light-dark(#fff, #101e38);
   box-shadow: 3px 4px 0 light-dark(#16499c18, #6d9fea19);
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 0.06em;
   transform: rotate(12deg);
@@ -289,24 +300,33 @@ h1 {
   color: var(--blue);
 }
 .star svg {
+  filter: drop-shadow(0 0 6px light-dark(#1353b733, #8fc0ff80));
   animation: star-turn 12s ease-in-out infinite;
 }
 .star-a {
-  top: 18px;
-  left: calc(50% - 129px);
+  top: 24px;
+  left: calc(50% - 182px);
   transform: rotate(13deg);
 }
+.star-a svg {
+  width: 34px;
+  height: 34px;
+}
 .star-b {
-  bottom: -30px;
-  left: calc(50% + 132px);
+  bottom: -38px;
+  left: calc(50% + 174px);
   transform: rotate(-10deg);
-  color: light-dark(#b28a12, #e8c953);
+  color: light-dark(#a87900, #ffe478);
+}
+.star-b svg {
+  width: 26px;
+  height: 26px;
 }
 .scribble {
   position: absolute;
-  bottom: -36px;
-  right: calc(50% + 94px);
-  font-size: 13px;
+  bottom: -46px;
+  left: calc(50% - 205px);
+  font-size: 16px;
   font-style: italic;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -634,8 +654,9 @@ footer a:hover {
   .go:hover {
     transform: rotate(0deg) translateY(-5px);
     box-shadow:
-      0 20px 48px light-dark(#c3982040, #f8c82028),
-      inset 0 1px 0 #fff7;
+      0 24px 56px light-dark(#c3982066, #ffd52655),
+      0 0 64px light-dark(#ffd52626, #ffd52638),
+      inset 0 2px 0 #ffffffbb;
   }
   .go:hover .go-arrow {
     transform: translate(3px, -3px);
@@ -663,30 +684,51 @@ footer a:hover {
 }
 @media (max-width: 480px) {
   main {
+    min-height: 590px;
+    padding-top: max(72px, env(safe-area-inset-top));
+    padding-bottom: 88px;
     padding-right: max(16px, env(safe-area-inset-right));
     padding-left: max(16px, env(safe-area-inset-left));
   }
   h1 {
-    font-size: 27px;
+    font-size: 32px;
+    margin-bottom: 36px;
+  }
+  .logo-wrap {
+    width: 128px;
+    height: 128px;
+  }
+  .go {
+    width: 268px;
+    min-height: 104px;
+    font-size: 58px;
+    gap: 20px;
+  }
+  .go-arrow {
+    width: 56px;
+    height: 56px;
   }
   .sticker-wrap {
-    top: 79px;
-    left: calc(50% + 62px);
+    top: 108px;
+    left: calc(50% + 48px);
   }
   .sticker {
-    font-size: 11px;
-    padding: 8px 9px;
+    font-size: 12px;
+    padding: 9px 10px;
   }
   .scribble {
-    right: calc(50% + 75px);
-    font-size: 11px;
+    left: calc(50% - 134px);
+    font-size: 13px;
     bottom: -48px;
   }
   .star-b {
-    left: calc(50% + 114px);
+    left: calc(50% + 130px);
+  }
+  .star-a {
+    left: calc(50% - 140px);
   }
   .orbits {
-    scale: 0.86;
+    scale: 0.76;
   }
   .footer-links {
     max-width: 290px;
