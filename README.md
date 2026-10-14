@@ -49,6 +49,12 @@ pnpm exec wrangler login
 pnpm run deploy
 ```
 
+### GitHub 自动检查
+
+`Check Code` 工作流在推送到 `master`、提交目标为 `master` 的 PR 或手动触发时，使用 Node.js 22 和 `package.json` 指定的 pnpm 版本执行冻结安装、测试及 `pnpm run check`。Wrangler 预检会自动构建静态页面并验证 Worker 打包，无需 Cloudflare 凭据，不上传或部署。
+
+Dependabot 每周检查根目录的 npm 依赖（包括 `pnpm-lock.yaml`）和 GitHub Actions 更新，并创建更新 PR。
+
 ### 两个域名分别部署
 
 创建两个独立的 Worker，均连接此仓库，分别设置构建变量及域名。一个 Worker 对应一套构建产物。
