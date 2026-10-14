@@ -455,17 +455,6 @@ footer a:hover {
     transform: rotate(360deg);
   }
 }
-.exit-wipe {
-  position: absolute;
-  z-index: 10;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: var(--gold);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0);
-}
 
 .is-entering .ambient {
   animation:
@@ -494,15 +483,6 @@ footer a:hover {
 .is-entering footer {
   animation: rise 1200ms ease-out 900ms both;
 }
-.is-leaving .go {
-  animation: press 900ms ease both;
-}
-.is-leaving .go-arrow {
-  animation: arrow-out 550ms ease-in both;
-}
-.is-leaving .exit-wipe {
-  animation: wipe-out 1050ms cubic-bezier(0.65, 0, 0.25, 1) 200ms both;
-}
 .is-hidden .satellite,
 .is-hidden .logo,
 .is-hidden .ambient,
@@ -510,14 +490,6 @@ footer a:hover {
 .is-hidden .star svg,
 .is-hidden .go::after {
   animation-play-state: paused;
-}
-.scene:not(.is-entering) .satellite,
-.scene:not(.is-entering) .logo,
-.scene:not(.is-entering) .ambient,
-.scene:not(.is-entering) .sticker,
-.scene:not(.is-entering) .star svg,
-.scene:not(.is-entering) .go::after {
-  animation: none;
 }
 
 @keyframes orbit-travel {
@@ -644,49 +616,6 @@ footer a:hover {
     scale: 1;
   }
 }
-@keyframes press {
-  0% {
-    transform: translate(var(--hover-x, 0px), var(--hover-y, -8px))
-      rotate(var(--hover-rotation, 0deg)) scale(1);
-  }
-  25% {
-    transform: translate(
-        calc(var(--hover-x, 0px) * 0.25),
-        calc(var(--hover-y, -8px) * 0.25)
-      )
-      rotate(var(--hover-rotation, 0deg)) scale(0.93);
-  }
-  100% {
-    transform: translate(var(--hover-x, 0px), var(--hover-y, -8px))
-      rotate(var(--hover-rotation, 0deg)) scale(1.04);
-  }
-}
-@keyframes arrow-out {
-  from {
-    transform: translate(var(--arrow-x, 4px), var(--arrow-y, -4px))
-      rotate(var(--arrow-rotation, 0deg));
-    opacity: 1;
-  }
-  to {
-    transform: translate(var(--arrow-exit-x, 40px), var(--arrow-exit-y, -40px))
-      rotate(var(--arrow-rotation, 0deg));
-    opacity: 0;
-  }
-}
-@keyframes wipe-out {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0);
-  }
-  10% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(var(--wipe-scale, 150));
-  }
-}
-
 @media (hover: hover) and (pointer: fine) {
   .logo-wrap:hover .logo {
     transform: translate(var(--hover-x, 0px), var(--hover-y, -10px))

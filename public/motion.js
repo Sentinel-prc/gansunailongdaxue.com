@@ -1,16 +1,9 @@
 const scene = document.querySelector(".scene");
 const go = document.querySelector(".go");
 const logo = document.querySelector(".logo-wrap");
-const wipe = document.querySelector(".exit-wipe");
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
 const finePointer = matchMedia("(hover: hover) and (pointer: fine)");
-let exitTimer;
 let pointerFrame;
-
-function resetExit() {
-  clearTimeout(exitTimer);
-  scene.classList.remove("is-leaving");
-}
 
 function resetPointer() {
   cancelAnimationFrame(pointerFrame);
@@ -21,7 +14,6 @@ function resetPointer() {
 function renderMotion() {
   if (reducedMotion.matches) {
     resetPointer();
-    resetExit();
   }
 }
 
@@ -42,8 +34,6 @@ function motionDirection(element, x = Math.SQRT1_2, y = -Math.SQRT1_2) {
   const rotation = (((angle * 180) / Math.PI + 45 + 540) % 360) - 180;
   go.style.setProperty("--arrow-x", `${dx * 6}px`);
   go.style.setProperty("--arrow-y", `${dy * 6}px`);
-  go.style.setProperty("--arrow-exit-x", `${dx * 56}px`);
-  go.style.setProperty("--arrow-exit-y", `${dy * 56}px`);
   go.style.setProperty("--arrow-rotation", `${rotation}deg`);
   go.style.setProperty("--sheen-angle", `${(angle * 180) / Math.PI + 90}deg`);
   go.style.setProperty("--sheen-start", `${50 + dx * 70}% ${50 + dy * 70}%`);
@@ -88,38 +78,8 @@ scene.addEventListener("pointermove", (event) => {
 });
 scene.addEventListener("pointerleave", resetPointer);
 
-go.addEventListener("click", (event) => {
-  // 保留原生链接打开方式，避免动画延迟导致新窗口被拦截。
-  if (
-    event.defaultPrevented ||
-    event.button !== 0 ||
-    event.metaKey ||
-    event.ctrlKey ||
-    event.shiftKey ||
-    event.altKey ||
-    reducedMotion.matches
-  )
-    return;
-  resetExit();
-  const button = go.getBoundingClientRect();
-  const area = scene.getBoundingClientRect();
-  wipe.style.left = `${button.left - area.left + button.width / 2}px`;
-  wipe.style.top = `${button.top - area.top + button.height / 2}px`;
-  wipe.style.setProperty(
-    "--wipe-scale",
-    Math.hypot(area.width, area.height) / 10,
-  );
-  void wipe.offsetWidth;
-  scene.classList.add("is-leaving");
-  exitTimer = setTimeout(resetExit, 1500);
-});
-
 document.addEventListener("visibilitychange", () => {
   scene.classList.toggle("is-hidden", document.hidden);
-  if (!document.hidden) resetExit();
 });
-window.addEventListener("focus", resetExit);
-window.addEventListener("pageshow", resetExit);
 
 renderMotion();
-scene.classList.add("is-entering");
