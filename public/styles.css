@@ -351,6 +351,8 @@ footer {
     max(23px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
   text-align: center;
   color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
 }
 footer::before {
   content: "";
@@ -367,17 +369,18 @@ footer::before {
     transparent
   );
 }
-footer a {
+footer a,
+.traffic-refresh {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
+  min-height: 24px;
   color: inherit;
-  font-size: 12px;
-  line-height: 1.8;
+  font: inherit;
   text-underline-offset: 4px;
 }
-footer a:hover {
+footer a:hover,
+.traffic-refresh:hover:not(:disabled) {
   color: light-dark(#2b271c, #ece9e3);
   text-decoration: underline;
 }
@@ -405,10 +408,9 @@ footer a:hover {
 }
 .traffic-stats {
   display: flex;
-  gap: 0 10px;
+  gap: 0 8px;
   margin-top: 2px;
-  font-size: 12px;
-  line-height: 1.8;
+  font: inherit;
   font-variant-numeric: tabular-nums;
 }
 .traffic-group {
@@ -421,7 +423,6 @@ footer a:hover {
   opacity: 0.6;
 }
 .traffic-refresh {
-  min-height: 44px;
   gap: 4px;
   padding: 0 4px;
   color: inherit;
@@ -430,13 +431,9 @@ footer a:hover {
   border-radius: 4px;
   font-size: inherit;
 }
-.traffic-refresh:hover {
-  color: var(--blue);
-  text-decoration: underline;
-}
 .traffic-refresh:disabled {
   cursor: wait;
-  opacity: 0.65;
+  opacity: 1;
 }
 .traffic-stats[aria-busy="true"] .traffic-refresh svg {
   animation: refresh-spin 1s linear infinite;
@@ -648,14 +645,6 @@ footer a:hover {
     rotate(var(--hover-rotation, 0deg)) scale(0.96);
 }
 @media (max-width: 600px) {
-  .traffic-stats {
-    flex-direction: column;
-    gap: 4px;
-    margin-top: 8px;
-  }
-  .traffic-divider {
-    display: none;
-  }
   footer {
     padding-bottom: max(12px, env(safe-area-inset-bottom));
   }
