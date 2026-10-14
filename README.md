@@ -29,7 +29,7 @@ pnpm exec wrangler login
 pnpm run deploy
 ```
 
-部署后，在 Cloudflare 控制台打开此 Worker 的「Settings → Domains & Routes → Add → Custom Domain」，添加 `甘肃奶龙大学.com`。该域名需要位于当前 Cloudflare 账号管理的 DNS 区域中。
+部署后，在 Cloudflare 控制台进入「Workers & Pages → gansunailongdaxue-com → Domains（域名）」，添加已有域名 `甘肃奶龙大学.com` 作为此 Worker 的自定义域名。该域名需要位于当前 Cloudflare 账号管理且已激活的 DNS 区域中；Cloudflare 会自动创建对应的 DNS 记录和证书。
 
 ## 文件与配置
 
