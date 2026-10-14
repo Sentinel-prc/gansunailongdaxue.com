@@ -5,7 +5,12 @@ import { createTrafficService } from "../src/traffic.js";
 const websiteId = "ee3cbb93-6ca4-4164-8a6c-4bb22b80675d";
 const shareURL = "https://umami.amoe.cc/share/test-share/site";
 
-function upstream({ legacy = false, fail = false, wrongSite = false } = {}) {
+function upstream({
+  legacy = false,
+  fail = false,
+  wrongSite = false,
+  siteId = websiteId,
+} = {}) {
   const calls = [];
   const fetcher = async (url, options) => {
     const parsed = new URL(url);
@@ -13,7 +18,7 @@ function upstream({ legacy = false, fail = false, wrongSite = false } = {}) {
     if (fail) return new Response("private upstream failure", { status: 500 });
     if (parsed.pathname.startsWith("/api/share/")) {
       return Response.json({
-        websiteId: wrongSite ? "other-site" : websiteId,
+        websiteId: wrongSite ? "other-site" : siteId,
         token: "private-token",
         shareType: 1,
       });
@@ -77,12 +82,12 @@ test("合并并发请求，30 秒内复用缓存，跨天立即更新", async ()
   assert.equal(fake.calls.length, 12);
 });
 
-test("拒绝其他站点、非本统计域名和无效分享配置", async () => {
+test("拒绝非法站点信息、不安全地址和无效分享配置", async () => {
   const fake = upstream({ wrongSite: true });
   const load = createTrafficService({ fetcher: fake.fetcher });
   for (const value of [
     undefined,
-    "https://evil.example/share/test",
+    "https://umami.amoe.cc/not-a-share/test",
     "http://umami.amoe.cc/share/test",
     "https://user:secret@umami.amoe.cc/share/test",
   ]) {
@@ -91,6 +96,27 @@ test("拒绝其他站点、非本统计域名和无效分享配置", async () =>
   assert.equal(fake.calls.length, 0);
   await assert.rejects(() => load(shareURL));
   assert.equal(fake.calls.length, 1);
+});
+
+test("使用分享链接的 Umami 域名及网站 ID，切换实例不复用缓存", async () => {
+  const siteId = "11111111-2222-3333-4444-555555555555";
+  const fake = upstream({ siteId });
+  const load = createTrafficService({ fetcher: fake.fetcher });
+  await load("https://analytics.example/share/test-share");
+  assert.equal(fake.calls.length, 4);
+  assert.ok(
+    fake.calls.every(({ url }) => url.origin === "https://analytics.example"),
+  );
+  assert.ok(
+    fake.calls.slice(1).every(({ url }) => url.pathname.includes(siteId)),
+  );
+  await load("https://analytics-two.example/share/test-share");
+  assert.equal(fake.calls.length, 8);
+  assert.ok(
+    fake.calls
+      .slice(4)
+      .every(({ url }) => url.origin === "https://analytics-two.example"),
+  );
 });
 
 test("跨零点时不复用尚未完成的昨日请求", async () => {

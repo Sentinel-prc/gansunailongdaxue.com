@@ -1,4 +1,3 @@
-const WEBSITE_ID = "ee3cbb93-6ca4-4164-8a6c-4bb22b80675d";
 const DAY = 86_400_000;
 const UTC8 = 8 * 60 * 60 * 1000;
 
@@ -6,7 +5,7 @@ export function todayStart(time = Date.now()) {
   return Math.floor((time + UTC8) / DAY) * DAY - UTC8;
 }
 
-function shareSlug(value) {
+function shareConfig(value) {
   let url;
   try {
     url = new URL(value);
@@ -16,15 +15,10 @@ function shareSlug(value) {
   const match = url.pathname.match(
     /^\/share\/([a-zA-Z0-9_-]{1,100})(?:\/[^/]+)?\/?$/,
   );
-  if (
-    url.origin !== "https://umami.amoe.cc" ||
-    url.username ||
-    url.password ||
-    !match
-  ) {
+  if (url.protocol !== "https:" || url.username || url.password || !match) {
     throw new Error("Invalid share configuration");
   }
-  return match[1];
+  return { origin: url.origin, slug: match[1] };
 }
 
 function count(input) {
@@ -39,7 +33,7 @@ export function createTrafficService({ fetcher = fetch, now = Date.now } = {}) {
   let cached;
   let flight;
 
-  async function load(slug, time) {
+  async function load(origin, slug, time) {
     const signal = AbortSignal.timeout(8000);
     async function get(path, token) {
       const headers = { Accept: "application/json" };
@@ -47,7 +41,7 @@ export function createTrafficService({ fetcher = fetch, now = Date.now } = {}) {
         headers["x-umami-share-token"] = token;
         headers["x-umami-share-context"] = "1";
       }
-      const response = await fetcher(`https://umami.amoe.cc${path}`, {
+      const response = await fetcher(`${origin}${path}`, {
         headers,
         signal,
         redirect: "manual",
@@ -60,7 +54,8 @@ export function createTrafficService({ fetcher = fetch, now = Date.now } = {}) {
 
     const share = await get(`/api/share/${slug}`);
     if (
-      share?.websiteId !== WEBSITE_ID ||
+      typeof share?.websiteId !== "string" ||
+      !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(share.websiteId) ||
       typeof share.token !== "string" ||
       !share.token ||
       share.token.length > 16384 ||
@@ -75,7 +70,7 @@ export function createTrafficService({ fetcher = fetch, now = Date.now } = {}) {
         timezone: "Asia/Shanghai",
       });
       const data = await get(
-        `/api/websites/${WEBSITE_ID}/stats?${query}`,
+        `/api/websites/${share.websiteId}/stats?${query}`,
         share.token,
       );
       return {
@@ -86,7 +81,7 @@ export function createTrafficService({ fetcher = fetch, now = Date.now } = {}) {
     const [today, total, active] = await Promise.all([
       counts(todayStart(time)),
       counts(0),
-      get(`/api/websites/${WEBSITE_ID}/active`, share.token),
+      get(`/api/websites/${share.websiteId}/active`, share.token),
     ]);
     return {
       today,
@@ -97,16 +92,16 @@ export function createTrafficService({ fetcher = fetch, now = Date.now } = {}) {
   }
 
   return async function traffic(shareURL) {
-    const slug = shareSlug(shareURL);
+    const { origin, slug } = shareConfig(shareURL);
     const time = now();
-    const key = `${slug}:${todayStart(time)}`;
+    const key = `${origin}:${slug}:${todayStart(time)}`;
     if (cached?.key === key && time < cached.until) {
       if (cached.failed) throw new Error("Umami unavailable");
       return cached.value;
     }
     if (flight?.key === key) return flight.promise;
     const current = { key };
-    current.promise = load(slug, time)
+    current.promise = load(origin, slug, time)
       .then((value) => {
         cached = {
           key,

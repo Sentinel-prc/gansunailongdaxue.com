@@ -257,6 +257,20 @@ h1 {
   height: 62px;
   transition: transform 400ms;
 }
+.go--label {
+  gap: 16px;
+  padding-inline: 24px;
+  font-size: 28px;
+  letter-spacing: 0;
+}
+.go--label > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.go--label .go-arrow {
+  width: 36px;
+  height: 36px;
+}
 .go:focus-visible {
   transform: translate(var(--hover-x, 0px), var(--hover-y, -8px))
     rotate(var(--hover-rotation, 0deg));
@@ -674,6 +688,15 @@ footer a:hover,
   .go-arrow {
     width: 56px;
     height: 56px;
+  }
+  .go.go--label {
+    gap: 12px;
+    padding-inline: 20px;
+    font-size: 24px;
+  }
+  .go--label .go-arrow {
+    width: 32px;
+    height: 32px;
   }
   .sticker-wrap {
     top: 108px;
