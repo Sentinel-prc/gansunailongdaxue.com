@@ -27,6 +27,13 @@
     <script defer src="/motion.js"></script>
     <script defer src="/audio.js"></script>
     <script defer src="/traffic.js"></script>
+    <noscript
+      ><style>
+        .traffic-stats {
+          display: none !important;
+        }
+      </style></noscript
+    >
     <script
       defer
       src="https://umami.amoe.cc/script.js"
@@ -156,24 +163,15 @@
       </main>
       <footer>
         <nav class="footer-links" aria-label="相关链接">
-          <span class="footer-source">
-            <a
-              class="version"
-              href="https://github.com/TomyJan/gansunailongdaxue.com/commit/__COMMIT_SHA__"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="查看提交 __COMMIT_SHORT__（新窗口打开）"
-              >__COMMIT_SHORT__</a
-            >
-            <a
-              href="https://github.com/TomyJan/gansunailongdaxue.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="GitHub 仓库（新窗口打开）"
-              >GitHub</a
-            >
-            <span class="footer-divider" aria-hidden="true">|</span>
-          </span>
+          <a
+            class="version"
+            href="https://github.com/TomyJan/gansunailongdaxue.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub 仓库，当前版本 __COMMIT_SHORT__（新窗口打开）"
+            >__COMMIT_SHORT__</a
+          >
+          <span class="footer-divider" aria-hidden="true">|</span>
           <a
             href="https://qm.qq.com/q/AjLVv044nu"
             target="_blank"
@@ -190,46 +188,52 @@
             >查找更多奶群和奶站</a
           >
         </nav>
-        <div class="traffic-stats" aria-label="访问统计" aria-live="polite">
-          <span class="traffic-group"
-            ><span>今日</span
-            ><span>访客 <span data-count="today-visitors">—</span></span
-            ><span>浏览 <span data-count="today-pageviews">—</span></span></span
+        <div
+          class="traffic-stats"
+          aria-label="访问统计"
+          aria-live="polite"
+          aria-busy="true"
+        >
+          <span class="traffic-values" hidden>
+            <span class="traffic-group"
+              ><span>今日</span
+              ><span>访客 <span data-count="today-visitors"></span></span
+              ><span>浏览 <span data-count="today-pageviews"></span></span
+            ></span>
+            <span class="traffic-divider" aria-hidden="true">·</span>
+            <span class="traffic-group"
+              ><span>总计</span
+              ><span>访客 <span data-count="total-visitors"></span></span
+              ><span>浏览 <span data-count="total-pageviews"></span></span
+            ></span>
+            <span class="traffic-divider" aria-hidden="true">·</span>
+            <span class="traffic-group"
+              ><span title="最近五分钟内的活跃访客"
+                >当前在线 <span data-count="online"></span></span
+            ></span>
+          </span>
+          <button
+            class="traffic-refresh"
+            type="button"
+            aria-label="访问统计加载中"
+            disabled
           >
-          <span class="traffic-divider" aria-hidden="true">·</span>
-          <span class="traffic-group"
-            ><span>总计</span
-            ><span>访客 <span data-count="total-visitors">—</span></span
-            ><span>浏览 <span data-count="total-pageviews">—</span></span></span
-          >
-          <span class="traffic-divider" aria-hidden="true">·</span>
-          <span class="traffic-group"
-            ><span title="最近五分钟内的活跃访客"
-              >当前在线 <span data-count="online">—</span></span
-            ><button
-              class="traffic-refresh"
-              type="button"
-              aria-label="刷新访问统计"
-              hidden
+            <svg
+              width="13"
+              height="13"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
             >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
-              >
-                <path
-                  d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1"
-                /></svg
-              ><span>刷新</span>
-            </button></span
-          >
-          <span class="traffic-status" hidden></span>
+              <path
+                d="M20 7v5h-5M4 17v-5h5M6 7a7 7 0 0 1 12-1l2 3M4 15l2 3a7 7 0 0 0 12-1"
+              /></svg
+            ><span>访问统计加载中</span>
+          </button>
         </div>
       </footer>
     </div>

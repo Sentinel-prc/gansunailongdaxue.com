@@ -381,18 +381,12 @@ footer a:hover {
   color: light-dark(#2b271c, #ece9e3);
   text-decoration: underline;
 }
-.footer-links,
-.footer-source {
+.footer-links {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0 8px;
-}
-.footer-links {
   flex-wrap: wrap;
-}
-.footer-source {
-  white-space: nowrap;
 }
 .version {
   font-variant-numeric: tabular-nums;
@@ -447,8 +441,8 @@ footer a:hover {
 .traffic-stats[aria-busy="true"] .traffic-refresh svg {
   animation: refresh-spin 1s linear infinite;
 }
-.traffic-status {
-  font-size: 11px;
+.traffic-values {
+  display: contents;
 }
 @keyframes refresh-spin {
   to {

@@ -1,6 +1,6 @@
 # 甘肃奶龙大学.com
 
-一个轻量的 Cloudflare Workers 入口页。GO 前往 [兰州理工大学](https://www.lut.edu.cn)，页脚提供当前提交、GitHub 仓库及 [查找更多奶群和奶站](https://nai.amoe.cc) 链接。响应式布局，自动跟随系统深色模式。
+一个轻量的 Cloudflare Workers 入口页。GO 前往 [兰州理工大学](https://www.lut.edu.cn)，页脚以当前版本短 hash 链接到 GitHub 仓库，并提供加入兰理奶群及 [查找更多奶群和奶站](https://nai.amoe.cc) 链接。响应式布局，自动跟随系统深色模式。
 
 ## 本地开发
 
@@ -13,7 +13,7 @@ pnpm run dev
 
 打开 http://127.0.0.1:8787。修改 HTML、CSS 或 Worker 后会自动重新加载。
 
-Wrangler 会自动执行 `pnpm run build`，将静态资源生成到 `dist/` 并注入当前提交的前 7 位 hash 和完整提交链接。Cloudflare 构建优先读取 `WORKERS_CI_COMMIT_SHA`，本地使用 `git rev-parse HEAD`。生成文件不提交到 Git。
+Wrangler 会自动执行 `pnpm run build`，将静态资源生成到 `dist/` 并注入当前提交的前 7 位 hash。Cloudflare 构建优先读取 `WORKERS_CI_COMMIT_SHA`，本地使用 `git rev-parse HEAD`。生成文件不提交到 Git。
 
 ## 检查与部署
 
@@ -60,7 +60,7 @@ Worker 直接代理 Umami 汇总查询，无需额外后端、数据库或付费
 UMAMI_SHARE_URL=https://umami.amoe.cc/share/分享码
 ```
 
-生产环境在 Worker 的「Settings → Variables and Secrets」中添加类型为 Secret、名称为 `UMAMI_SHARE_URL` 的配置，值填写真实分享链接；也可运行 `pnpm exec wrangler secret put UMAMI_SHARE_URL` 交互输入。分享链接和运行时获取的 token 仅供 Worker 使用，不写入 `wrangler.jsonc`、前端资源或 Git。`.dev.vars` 已被 Git 忽略，仅用于本地开发。只支持当前统计域名和此站点 ID；未配置或查询失败时显示占位符和刷新入口。
+生产环境在 Worker 的「Settings → Variables and Secrets」中添加类型为 Secret、名称为 `UMAMI_SHARE_URL` 的配置，值填写真实分享链接；也可运行 `pnpm exec wrangler secret put UMAMI_SHARE_URL` 交互输入。分享链接和运行时获取的 token 仅供 Worker 使用，不写入 `wrangler.jsonc`、前端资源或 Git。`.dev.vars` 已被 Git 忽略，仅用于本地开发。只支持当前统计域名和此站点 ID；加载中显示「访问统计加载中」，未配置或查询失败显示「访问统计加载失败，尝试刷新」，点击即可重试。成功后显示统计数字和刷新入口。
 
-今日按 UTC+8 零点起算；总计为 Umami 全历史汇总；当前在线为最近五分钟的活跃访客。浏览器仅在载入和点击「刷新」时查询本站 `/api/traffic`，不自动轮询。Worker 合并并发请求，并使用内存及 Cloudflare Cache API 缓存汇总结果最多 30 秒、跨天失效；缓存按边缘数据中心复用，未命中时请求 Umami 四次。失败短暂退避 5 秒，刷新失败保留已有数字。
+今日按 UTC+8 零点起算；总计为 Umami 全历史汇总；当前在线为最近五分钟的活跃访客。浏览器仅在载入和点击「刷新」时查询本站 `/api/traffic`，不自动轮询。Worker 合并并发请求，并使用内存及 Cloudflare Cache API 缓存汇总结果最多 30 秒、跨天失效；缓存按边缘数据中心复用，未命中时请求 Umami 四次。失败短暂退避 5 秒。载入或刷新期间隐藏数字，失败时显示重试入口。
 

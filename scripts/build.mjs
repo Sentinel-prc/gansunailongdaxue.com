@@ -16,9 +16,9 @@ if (!/^[0-9a-f]{40}$/i.test(commit)) {
   throw new Error("Expected a full Git commit SHA for the footer version.");
 }
 
-const html = (await readFile(new URL("public/index.html", root), "utf8"))
-  .replaceAll("__COMMIT_SHA__", commit)
-  .replaceAll("__COMMIT_SHORT__", commit.slice(0, 7));
+const html = (
+  await readFile(new URL("public/index.html", root), "utf8")
+).replaceAll("__COMMIT_SHORT__", commit.slice(0, 7));
 
 const output = new URL("dist/", root);
 await mkdir(output, { recursive: true });

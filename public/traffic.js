@@ -1,15 +1,29 @@
 const stats = document.querySelector(".traffic-stats");
 const refresh = document.querySelector(".traffic-refresh");
-const status = document.querySelector(".traffic-status");
+const counters = document.querySelector(".traffic-values");
+const label = refresh.querySelector("span");
 let busy = false;
-let hasData = false;
+
+function showState(state) {
+  const loading = state === "loading";
+  counters.hidden = state !== "ready";
+  refresh.disabled = loading;
+  stats.setAttribute("aria-busy", String(loading));
+  label.textContent = loading
+    ? "访问统计加载中"
+    : state === "failed"
+      ? "访问统计加载失败，尝试刷新"
+      : "刷新";
+  refresh.setAttribute(
+    "aria-label",
+    state === "ready" ? "刷新访问统计" : label.textContent,
+  );
+}
 
 async function loadTraffic() {
   if (busy) return;
   busy = true;
-  refresh.disabled = true;
-  stats.setAttribute("aria-busy", "true");
-  status.hidden = true;
+  showState("loading");
   try {
     const response = await fetch("/api/traffic", {
       cache: "no-store",
@@ -33,17 +47,13 @@ async function loadTraffic() {
     for (const [name, value] of Object.entries(values)) {
       stats.querySelector(`[data-count="${name}"]`).textContent = String(value);
     }
-    hasData = true;
+    showState("ready");
   } catch {
-    status.textContent = hasData ? "刷新失败，请稍后重试" : "统计暂不可用";
-    status.hidden = false;
+    showState("failed");
   } finally {
     busy = false;
-    refresh.disabled = false;
-    stats.setAttribute("aria-busy", "false");
   }
 }
 
-refresh.hidden = false;
 refresh.addEventListener("click", loadTraffic);
 void loadTraffic();
