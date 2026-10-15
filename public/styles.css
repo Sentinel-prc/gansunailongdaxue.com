@@ -433,19 +433,32 @@ footer a:hover,
 }
 .traffic-stats {
   display: flex;
-  gap: 0 8px;
+  gap: 0 20px;
   margin-top: 2px;
   font: inherit;
   font-variant-numeric: tabular-nums;
 }
 .traffic-group {
+  position: relative;
   gap: 0 6px;
 }
 .traffic-group > span {
   white-space: nowrap;
 }
-.traffic-divider {
+.traffic-stats.separators-ready
+  .traffic-group
+  + .traffic-group:not(.starts-row)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -10px;
+  translate: -50% -50%;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: currentColor;
   opacity: 0.6;
+  pointer-events: none;
 }
 .traffic-refresh {
   gap: 4px;
