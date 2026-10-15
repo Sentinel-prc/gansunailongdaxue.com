@@ -87,6 +87,9 @@ GO_BTN_TGT=https://home.lut.edu.cn/
 - `public/motion.js`：指针牵引及进入方向对应的按钮、校徽动效。
 - `public/audio.js`：页面载入后后台缓存音频，点击校徽随机播放，音量为 36%，不显示控件或提示。
 - `public/traffic.js`：页脚统计加载与手动刷新。
+- `public/notice.js`：底部 Cookies 与本地存储提示、已读版本记录。
+- `public/terms/index.html`、`public/privacy/index.html`：用户协议和隐私政策静态模板。
+- `public/legal.css`：政策页面的阅读排版。
 - `public/logo.png`、`public/favicon.ico`：裁切后的透明校徽与站点图标。
 - `src/index.js`：返回静态资源与 `/api/traffic` 统计接口。
 - `src/traffic.js`：Umami 汇总查询、缓存与并发合并。
@@ -100,6 +103,14 @@ GO_BTN_TGT=https://home.lut.edu.cn/
 页面使用原生 HTML/CSS 和少量 JavaScript，构建脚本只复制资源并替换配置；唯一开发依赖是 Wrangler。图标从用户提供的原图裁切，保留圆圈内部图案，圈外透明。
 
 页面采用流光背景与偏心轨道，入场约 2.4 秒，光点与星芒以 32～55 秒周期持续公转。系统开启“减少动态效果”时自动关闭动画。入场状态直接写入 HTML，从首次绘制开始显示动画，不等待交互脚本。页面隐藏时暂停循环动画。GO 按钮的位移、倾斜、流光及箭头动效跟随指针进入方向，校徽悬停也按进入方向移动与倾斜；键盘聚焦默认朝右上方。原生新窗口打开行为保持不变。入场及轨道动画由 CSS 执行，禁用 JavaScript 后所有链接仍可使用。
+
+## 用户协议与隐私提示
+
+首页页脚提供 `/terms/` 用户协议和 `/privacy/` 隐私政策入口。两页随构建配置替换站名、按钮和链接，沿用 MiSans 及系统深色模式。政策页不加载统计或音频脚本。
+
+首页底部提示为告知性质，Umami 仍在页面载入时加载。点击「我知道了」会将当前提示版本写入 `localStorage` 的 `privacy-notice-version`，本浏览器、本站点后续访问不再显示。清除站点数据或修改 `public/index.html` 中提示的 `data-version` 后会重新显示；禁止本地存储时仍可关闭本次提示。
+
+修改统计服务、外部资源或数据处理方式时，应同步核实和更新隐私政策、日期及提示版本。源码无法确定实际统计库与 Cloudflare 日志的保留期限，部署维护者需要按服务端实际配置管理这些数据。
 
 ## 页脚访问统计
 

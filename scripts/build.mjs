@@ -23,10 +23,15 @@ if (!/^[0-9a-f]{40}$/i.test(commit)) {
   throw new Error("Expected a full Git commit SHA for the footer version.");
 }
 
-const html = renderPage(
-  await readFile(new URL("public/index.html", root), "utf8"),
-  process.env,
-  commit,
+const pages = await Promise.all(
+  ["index.html", "terms/index.html", "privacy/index.html"].map(async (path) => [
+    path,
+    renderPage(
+      await readFile(new URL(`public/${path}`, root), "utf8"),
+      process.env,
+      commit,
+    ),
+  ]),
 );
 
 const output = new URL("dist/", root);
@@ -39,5 +44,7 @@ for (const entry of await readdir(output)) {
   });
 }
 await cp(new URL("public/", root), output, { recursive: true });
-await writeFile(new URL("dist/index.html", root), html);
+await Promise.all(
+  pages.map(([path, html]) => writeFile(new URL(`dist/${path}`, root), html)),
+);
 console.log(`Built static page for commit ${commit.slice(0, 7)}.`);

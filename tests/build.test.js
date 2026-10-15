@@ -1,13 +1,51 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { cp, mkdtemp, readFile, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import test from "node:test";
 import { defaults, renderPage } from "../scripts/site-config.mjs";
+import { execFileSync } from "node:child_process";
 
 const template = await readFile(
   new URL("../public/index.html", import.meta.url),
   "utf8",
 );
 const commit = "1234567890abcdef1234567890abcdef12345678";
+
+test("静态构建同时生成两份政策，沿用站点配置且不输出分享链接", async () => {
+  const root = new URL("../", import.meta.url);
+  const sandbox = await mkdtemp(join(tmpdir(), "nailong-build-"));
+  try {
+    for (const directory of ["public", "scripts"]) {
+      await cp(new URL(directory, root), join(sandbox, directory), {
+        recursive: true,
+      });
+    }
+    execFileSync(process.execPath, ["scripts/build.mjs"], {
+      cwd: sandbox,
+      env: {
+        ...process.env,
+        ...defaults,
+        SITE_NAME: "甘肃奶蛙大学",
+        WORKERS_CI_COMMIT_SHA: commit,
+        UMAMI_SHARE_URL: "private-share-sentinel",
+      },
+    });
+    for (const path of [
+      "index.html",
+      "terms/index.html",
+      "privacy/index.html",
+    ]) {
+      const html = await readFile(join(sandbox, "dist", path), "utf8");
+      assert.ok(html.includes("甘肃奶蛙大学"));
+      assert.ok(!html.includes("private-share-sentinel"));
+      assert.ok(!/__([A-Z_]+)__/.test(html));
+    }
+  } finally {
+    assert.equal(dirname(sandbox), resolve(tmpdir()));
+    await rm(sandbox, { recursive: true, force: true });
+  }
+});
 
 test("不配置时生成奶龙默认静态页，不输出后端分享链接", () => {
   const html = renderPage(
