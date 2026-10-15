@@ -399,18 +399,29 @@ footer a:hover,
   text-decoration: underline;
 }
 .footer-links {
+  --footer-gap: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0 8px;
+  gap: 0 var(--footer-gap);
   flex-wrap: wrap;
 }
 .version {
   font-variant-numeric: tabular-nums;
 }
-.footer-divider {
+.footer-links > a {
+  position: relative;
+}
+.footer-links.separators-ready > a + a:not(.starts-row)::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: calc(var(--footer-gap) / -2);
+  translate: -50% -50%;
+  height: 12px;
+  border-left: 1px solid currentColor;
   opacity: 0.4;
-  font-size: 12px;
+  pointer-events: none;
 }
 .traffic-stats,
 .traffic-group,
@@ -721,9 +732,9 @@ footer a:hover,
     scale: 0.76;
   }
   .footer-links {
+    --footer-gap: 18px;
     max-width: 290px;
     margin-inline: auto;
-    gap: 0 7px;
   }
 }
 .notice-open footer {

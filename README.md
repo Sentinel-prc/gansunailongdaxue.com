@@ -88,6 +88,7 @@ GO_BTN_TGT=https://home.lut.edu.cn/
 - `public/audio.js`：页面载入后后台缓存音频，点击校徽随机播放，音量为 36%，不显示控件或提示。
 - `public/traffic.js`：页脚统计加载与手动刷新。
 - `public/notice.js`：底部 Cookies 与本地存储提示、已读版本记录。
+- `public/footer.js`：按实际换行位置显示页脚链接之间的分隔线。
 - `public/terms/index.html`、`public/privacy/index.html`：用户协议和隐私政策静态模板。
 - `public/legal.css`：政策页面的阅读排版。
 - `public/logo.png`、`public/favicon.ico`：裁切后的透明校徽与站点图标。
