@@ -95,6 +95,20 @@ test("每个字段均可独立配置，缺失和空白使用各自默认值", ()
   }
 });
 
+test("首页贴纸文案可独立配置、回退并转义 HTML", () => {
+  const html = renderPage(template, { STICKER_TXT: "奶蛙出没" }, commit);
+  assert.ok(html.includes("奶蛙出没"));
+  assert.ok(!html.includes("奶龙出没"));
+  for (const env of [{}, { STICKER_TXT: "  " }]) {
+    assert.ok(renderPage(template, env, commit).includes("奶龙出没"));
+  }
+  assert.ok(
+    renderPage(template, { STICKER_TXT: "奶蛙 <>&" }, commit).includes(
+      "奶蛙 &lt;&gt;&amp;",
+    ),
+  );
+});
+
 test("配置文本转义 HTML，替换一次，拒绝可执行 URL", () => {
   const text = "奶蛙 <script>\"&' __GROUP_NAME__";
   const html = renderPage(

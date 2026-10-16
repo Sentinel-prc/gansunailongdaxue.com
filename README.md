@@ -19,11 +19,12 @@ Wrangler 会自动执行 `pnpm run build`，将配置和当前提交的前 7 位
 
 ## 可选配置
 
-以下七项是**构建环境变量**，每项独立回退，未设置或留空均使用表中的默认值。配置会成为公开页面内容，修改后需要重新构建、部署。
+以下是可选的**构建环境变量**，每项独立回退，未设置或留空均使用表中的默认值。配置会成为公开页面内容，修改后需要重新构建、部署。
 
 | 变量               | 用途                                           | 默认值                                 |
 | ------------------ | ---------------------------------------------- | -------------------------------------- |
 | `SITE_NAME`        | 浏览器标题、页面标题、描述及校徽替代文字       | `甘肃奶龙大学`                         |
+| `STICKER_TXT`      | 首页贴纸文本                                   | `奶龙出没`                             |
 | `GO_BTN_TXT`       | 主按钮文本                                     | `GO`                                   |
 | `GO_BTN_TGT`       | 主按钮跳转地址                                 | `https://www.lut.edu.cn/`              |
 | `UMAMI_SCRIPT_URL` | Umami 采集脚本地址                             | `https://umami.amoe.cc/script.js`      |
@@ -65,7 +66,7 @@ Dependabot 每周检查根目录的 npm 依赖（包括 `pnpm-lock.yaml`）和 G
 | `甘肃奶蛙大学.com` | `gansunaiwadaxue-com`   | `甘肃奶蛙大学` | `前往红柳易办` | `https://home.lut.edu.cn/` |
 
 1. 在每个 Worker 的「Settings → Build」中连接仓库，生产分支设为 `master`，构建命令设为 `pnpm run build`。
-2. 在同一页的「Build variables and secrets」中设置上表的构建变量。奶龙站可全部省略；奶蛙站至少设置这三个字段。Umami 及群链接需要不同配置时，再分别添加相应变量。
+2. 在同一页的「Build variables and secrets」中设置上表的构建变量。奶龙站可全部省略；奶蛙站至少设置这三个字段。贴纸文案可另外设置 `STICKER_TXT=奶蛙出没`；Umami 及群链接需要不同配置时，再分别添加相应变量。
 3. 设置部署命令。奶龙站使用 `pnpm exec wrangler deploy --name gansunailongdaxue-com`；奶蛙站使用 `pnpm exec wrangler deploy --name gansunaiwadaxue-com`。若自定 Worker 名称，将 `--name` 替换为控制台中的实际名称，覆盖仓库中默认的 Worker 名称。
 4. 如需显示访问统计，在每个 Worker 的「Settings → Variables and Secrets」中添加类型为 Secret、名称为 `UMAMI_SHARE_URL` 的配置。它应属于该站点的 Umami 网站；更换采集 ID 或统计服务时同步更换分享链接。
 5. 构建并部署后，进入各自的「Domains（域名）」标签页，添加对应域名。域名需位于当前 Cloudflare 账号管理且已激活的 DNS 区域中；Cloudflare 会自动创建 DNS 记录和证书。
@@ -74,6 +75,7 @@ Dependabot 每周检查根目录的 npm 依赖（包括 `pnpm-lock.yaml`）和 G
 
 ```env
 SITE_NAME=甘肃奶蛙大学
+STICKER_TXT=奶蛙出没
 GO_BTN_TXT=前往红柳易办
 GO_BTN_TGT=https://home.lut.edu.cn/
 ```

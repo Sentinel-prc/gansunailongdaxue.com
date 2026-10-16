@@ -1,5 +1,6 @@
 export const defaults = {
   SITE_NAME: "甘肃奶龙大学",
+  STICKER_TXT: "奶龙出没",
   GO_BTN_TXT: "GO",
   GO_BTN_TGT: "https://www.lut.edu.cn/",
   UMAMI_SCRIPT_URL: "https://umami.amoe.cc/script.js",
